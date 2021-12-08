@@ -1,6 +1,4 @@
-package com.evaldo.testeajax.domain;
-
-
+package com.mballem.demoajax.domain;
 
 import java.io.Serializable;
 

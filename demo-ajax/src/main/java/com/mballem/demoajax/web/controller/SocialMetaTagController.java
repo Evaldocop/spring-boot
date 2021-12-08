@@ -1,5 +1,4 @@
-package com.evaldo.testeajax.web.controller;
-
+package com.mballem.demoajax.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.evaldo.testeajax.domain.SocialMetaTag;
-import com.evaldo.testeajax.service.SocialMetaTagService;
+import com.mballem.demoajax.domain.SocialMetaTag;
+import com.mballem.demoajax.service.SocialMetaTagService;
 
 @Controller
 @RequestMapping("/meta")

@@ -1,6 +1,4 @@
-package com.evaldo.testeajax.web.controller;
-
-
+package com.mballem.demoajax.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +8,6 @@ public class HomeController {
 
 	@GetMapping("/")
 	public String init() {
-		return "promo-add";
+		return "redirect:/promocao/add";
 	}
 }

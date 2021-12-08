@@ -1,6 +1,4 @@
-package com.evaldo.testeajax.service;
-
-
+package com.mballem.demoajax.service;
 
 import java.io.IOException;
 
@@ -10,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.evaldo.testeajax.domain.SocialMetaTag;
+import com.mballem.demoajax.domain.SocialMetaTag;
 
 @Service
 public class SocialMetaTagService {
@@ -34,7 +32,10 @@ public class SocialMetaTagService {
 	private SocialMetaTag getTwitterCardByUrl(String url) {
 		SocialMetaTag tag = new SocialMetaTag();
 		try {
-			Document doc = Jsoup.connect(url).get();
+			Document doc = Jsoup.connect(url)
+				      .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+				      .referrer("http://www.google.com")
+				      .get();
 			tag.setTitle(doc.head().select("meta[name=twitter:title]").attr("content"));
 			tag.setSite(doc.head().select("meta[name=twitter:site]").attr("content"));
 			tag.setImage(doc.head().select("meta[name=twitter:image]").attr("content"));
@@ -48,7 +49,10 @@ public class SocialMetaTagService {
 	private SocialMetaTag getOpenGraphByUrl(String url) {
 		SocialMetaTag tag = new SocialMetaTag();
 		try {
-			Document doc = Jsoup.connect(url).get();
+			Document doc = Jsoup.connect(url)
+				      .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+				      .referrer("http://www.google.com")
+				      .get();
 			tag.setTitle(doc.head().select("meta[property=og:title]").attr("content"));
 			tag.setSite(doc.head().select("meta[property=og:site_name]").attr("content"));
 			tag.setImage(doc.head().select("meta[property=og:image]").attr("content"));
