@@ -1,6 +1,7 @@
 package com.evaldo.testeajax.web.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +11,12 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +50,15 @@ public class PromocaoController {
 	@GetMapping("/add")
 	public String abrirCadastro() {
 		return "/promo-add";
+	}
+	
+	
+	@GetMapping("/list")
+	public String listarOfertas(ModelMap model){
+	  //ordenamenti não funciona
+	   Sort sort= Sort.by(Direction.ASC,"dtCadastro");
+		model.addAttribute("promocoes",promocaoRepository.findAll(sort));
+		return "promo-list";
 	}
 	
 	
