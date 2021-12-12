@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ManyToAny;
 import org.springframework.format.annotation.NumberFormat;
@@ -26,9 +28,12 @@ public class Promocao implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	
+	@NotBlank(message = "Um título é nessário.")
 	@Column(name = "titulo", nullable = false)
 	private String titulo;
 	
+	@NotBlank(message  ="Um link para promoção é requerido.")
 	@Column(name = "link_promocao", nullable = false)
 	private String linkPromocao;
 	
@@ -41,7 +46,7 @@ public class Promocao implements Serializable {
 	@Column(name = "link_imagem", nullable = false)
 	private String linkImagem;
 	
-	
+	@NotNull(message = "Um Preço é requerido.")
 	@NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
 	@Column(name = "preco_promocao", nullable = false)
 	private BigDecimal preco;
@@ -53,6 +58,8 @@ public class Promocao implements Serializable {
 	@Column(name = "data_cadastro", nullable = false)
 	private LocalDateTime dtCadastro;
 	
+	
+	@NotNull(message = "Uma Categoria é requerida.")
 	@ManyToOne
 	@JoinColumn(name = "categoria_fk")
 	private Categoria categoria;
