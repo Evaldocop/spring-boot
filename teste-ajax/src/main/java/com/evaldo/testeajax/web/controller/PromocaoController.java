@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.evaldo.testeajax.domain.Categoria;
 import com.evaldo.testeajax.domain.Promocao;
@@ -57,8 +59,19 @@ public class PromocaoController {
 	public String listarOfertas(ModelMap model){
 	  //ordenamenti não funciona
 	   Sort sort= Sort.by(Direction.ASC,"dtCadastro");
-		model.addAttribute("promocoes",promocaoRepository.findAll(sort));
+	   PageRequest pagesRequest = PageRequest.of(0, 2, sort);
+		model.addAttribute("promocoes",promocaoRepository.findAll(pagesRequest));
 		return "promo-list";
+	}
+	
+	
+	@GetMapping("/list/ajax")
+	public String listarCards(@RequestParam(name = "page" ,defaultValue = "1") int page,ModelMap model){
+	
+	   Sort sort= Sort.by(Direction.ASC,"dtCadastro");
+	   PageRequest pagesRequest = PageRequest.of(page, 2, sort);
+		model.addAttribute("promocoes",promocaoRepository.findAll(pagesRequest));
+		return "promo-card";
 	}
 	
 	

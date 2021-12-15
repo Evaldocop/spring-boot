@@ -12,7 +12,7 @@ $("#form-add-promo").submit(function(evt) {
 	promo.site = $("#site").text();
 	promo.linkImagem = $("#linkImagem").attr("src");
 
-	console.log("promo >>>", promo);
+	//console.log("promo >>>", promo);
 
 	$.ajax({
 		method: "POST",
