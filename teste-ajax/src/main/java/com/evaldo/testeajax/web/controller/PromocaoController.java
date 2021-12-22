@@ -22,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -93,6 +94,23 @@ public class PromocaoController {
 		promocaoRepository.save(promo);
 		return ResponseEntity.ok().build();
 		
+	}
+	
+	@PostMapping("/like/{id}")
+	public ResponseEntity<?> adicionarLikes(@PathVariable ("id") Long id){
+		
+		promocaoRepository.updateSomarLikes(id);
+		int likes = promocaoRepository.findLikesById(id);
+		
+		
+		return ResponseEntity.ok(likes);
+		
+	}
+	
+	@GetMapping("/site")
+	public ResponseEntity<?>  autocompleteByTermo(@RequestParam("termo") String site){
+		List<String> sites= promocaoRepository.findSiteTermo(site);
+		return ResponseEntity.ok(sites);
 	}
 
 }
