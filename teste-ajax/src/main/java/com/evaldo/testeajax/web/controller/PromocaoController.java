@@ -67,11 +67,17 @@ public class PromocaoController {
 	
 	
 	@GetMapping("/list/ajax")
-	public String listarCards(@RequestParam(name = "page" ,defaultValue = "1") int page,ModelMap model){
+	public String listarCards(@RequestParam(name = "page" ,defaultValue = "1") int page,
+			                  @RequestParam(name = "site", defaultValue = "") String site,
+			                  ModelMap model){
 	
 	   Sort sort= Sort.by(Direction.ASC,"dtCadastro");
 	   PageRequest pagesRequest = PageRequest.of(page, 2, sort);
-		model.addAttribute("promocoes",promocaoRepository.findAll(pagesRequest));
+	   if (site.isEmpty()) {
+			model.addAttribute("promocoes", promocaoRepository.findAll(pagesRequest));
+		} else {
+			model.addAttribute("promocoes", promocaoRepository.findBySite(site, pagesRequest));
+		}
 		return "promo-card";
 	}
 	
@@ -106,11 +112,20 @@ public class PromocaoController {
 		return ResponseEntity.ok(likes);
 		
 	}
-	
+	// ======================================AUTOCOMPLETE===============================================
 	@GetMapping("/site")
 	public ResponseEntity<?>  autocompleteByTermo(@RequestParam("termo") String site){
 		List<String> sites= promocaoRepository.findSiteTermo(site);
 		return ResponseEntity.ok(sites);
+	}
+	
+	@GetMapping("/site/list")
+	public String listarPorSite(@RequestParam("site") String site,ModelMap model) {
+		 
+		 Sort sort= Sort.by(Direction.ASC,"dtCadastro");
+		   PageRequest pagesRequest = PageRequest.of(0, 2, sort);
+		   model.addAttribute("promocoes",promocaoRepository.findBySite(site, pagesRequest));
+			return "promo-card";
 	}
 
 }
