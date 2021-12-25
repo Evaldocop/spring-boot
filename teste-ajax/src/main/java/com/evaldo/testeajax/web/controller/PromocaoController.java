@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ import com.evaldo.testeajax.domain.Categoria;
 import com.evaldo.testeajax.domain.Promocao;
 import com.evaldo.testeajax.repository.CategoriaRepository;
 import com.evaldo.testeajax.repository.PromocaoRepository;
+import com.evaldo.testeajax.service.PromocaoDataTablesService;
 
 @Controller
 @RequestMapping("/promocao")
@@ -44,6 +46,25 @@ public class PromocaoController {
 	@Autowired
 	private PromocaoRepository promocaoRepository;
 	
+	//================ DATATABLES =================================================
+	
+	@GetMapping("/tabela")
+    public String showTabela() {
+		return "promo-datatables";
+    	
+    }
+	
+	@GetMapping("/datatables/server")
+	public ResponseEntity<?> datatables(HttpServletRequest request){
+		Map<String, Object> data = new PromocaoDataTablesService().execute(promocaoRepository, request);
+		return ResponseEntity.ok(data);
+	}
+	
+	
+	
+	
+	//================ DATATABLES =================================================
+		
 	
 	@ModelAttribute("categorias")
 	public List<Categoria> getCategorias(){
