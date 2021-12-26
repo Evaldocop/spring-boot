@@ -79,9 +79,10 @@ public class PromocaoController {
 	
 	@GetMapping("/list")
 	public String listarOfertas(ModelMap model){
-	  //ordenamenti não funciona
-	   Sort sort= Sort.by(Direction.ASC,"dtCadastro");
-	   PageRequest pagesRequest = PageRequest.of(0, 2, sort);
+	  //ordenamento não funciona
+    	Sort.Direction sort= Sort.Direction.ASC;
+		
+	   PageRequest pagesRequest = PageRequest.of(0,5 , sort);
 		model.addAttribute("promocoes",promocaoRepository.findAll(pagesRequest));
 		return "promo-list";
 	}
@@ -93,7 +94,7 @@ public class PromocaoController {
 			                  ModelMap model){
 	
 	   Sort sort= Sort.by(Direction.ASC,"dtCadastro");
-	   PageRequest pagesRequest = PageRequest.of(page, 2, sort);
+	   PageRequest pagesRequest = PageRequest.of(page, 3, sort);
 	   if (site.isEmpty()) {
 			model.addAttribute("promocoes", promocaoRepository.findAll(pagesRequest));
 		} else {
@@ -144,7 +145,7 @@ public class PromocaoController {
 	public String listarPorSite(@RequestParam("site") String site,ModelMap model) {
 		 
 		 Sort sort= Sort.by(Direction.ASC,"dtCadastro");
-		   PageRequest pagesRequest = PageRequest.of(0, 2, sort);
+		   PageRequest pagesRequest = PageRequest.of(0, 3, sort);
 		   model.addAttribute("promocoes",promocaoRepository.findBySite(site, pagesRequest));
 			return "promo-card";
 	}

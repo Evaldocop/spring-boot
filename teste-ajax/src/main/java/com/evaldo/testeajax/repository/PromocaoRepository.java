@@ -1,5 +1,6 @@
 package com.evaldo.testeajax.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -15,10 +16,11 @@ import com.evaldo.testeajax.domain.Promocao;
 
 public interface PromocaoRepository extends JpaRepository<Promocao, Long>{
 	
+	
+	
 	@Query("select distinct p.site from Promocao p where p.site LIKE %:termo%")
 	List<String> findSiteTermo(@Param("termo") String site);
-	
-	
+		
 	
 	@Transactional(readOnly = false)
 	@Modifying
@@ -32,6 +34,15 @@ public interface PromocaoRepository extends JpaRepository<Promocao, Long>{
 
 	@Query("select p from Promocao p where p.site like  :site")
 	Page<Promocao> findBySite(@Param("site") String site, Pageable pageable);
+	
+	@Query("select p from Promocao p where p.titulo like  %:search% "
+			                        + " or p.site like  %:search% "
+			                        + " or p.categoria.titulo like  %:search%")
+	Page<Promocao> findByTituloOrSiteOrCategoria(@Param("search") String search, Pageable pageable);
+	
+	@Query("select p from Promocao p where p.preco = :preco")
+    Page<Promocao> findByPreco(@Param("preco") BigDecimal preco, Pageable pageable);
+
 
 	
 	

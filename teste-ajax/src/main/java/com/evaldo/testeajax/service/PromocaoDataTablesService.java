@@ -1,5 +1,6 @@
 package com.evaldo.testeajax.service;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -34,10 +35,11 @@ public class PromocaoDataTablesService {
 			
 			String column = ColumnName(request);
 			Sort.Direction direction=orderBy(request);
+			String search = searchBy(request);
 			
-			Pageable pageable =PageRequest.of(current,length,direction,column);
+			Pageable pageable =PageRequest.of(current,length,direction,column);		
+			Page<Promocao>  page = queryBy(search,promocaoRepository,pageable);		
 			
-			Page<Promocao>  page = queryBy(promocaoRepository,pageable);
 			
 			Map<String,Object> json= new LinkedHashMap<>();
 			
@@ -48,9 +50,22 @@ public class PromocaoDataTablesService {
 			
 			return json;
 		}
-		private Page<Promocao> queryBy(PromocaoRepository promocaoRepository, Pageable pageable) {
+	
+		private Page<Promocao> queryBy(String search,PromocaoRepository promocaoRepository, Pageable pageable) {
+			if(search.isEmpty())
+				return promocaoRepository.findAll(pageable);
+			if(search.matches("^[0-9]+([.,][0-9]{2})?$")) {
+				search= search.replace(",", ".");
+				return promocaoRepository.findByPreco(new BigDecimal(search), pageable);
+			}
+				
+		   return promocaoRepository.findByTituloOrSiteOrCategoria(search, pageable);
+		}
+		
+		private String searchBy(HttpServletRequest request) {
 			// TODO Auto-generated method stub
-			return promocaoRepository.findAll(pageable);
+			return request.getParameter("search[value]").isEmpty()?""
+				   : request.getParameter("search[value]");
 		}
 		private Direction orderBy(HttpServletRequest request) {
 			String order = request.getParameter("order[0][column]");
