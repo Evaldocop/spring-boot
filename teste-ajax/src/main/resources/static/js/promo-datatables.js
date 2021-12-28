@@ -1,10 +1,11 @@
 $(document).ready(function(){
 	moment.locale('pt-br');
-	$('#table-server').DataTable({
+	var table = $('#table-server').DataTable({
 		processing: true,
 		serverSide: true,
 		responsive: true,
-		lengthMenu:[ 1, 2, 3],
+		lengthMenu:[ 1, 2,3],
+	    pageLength: 2,
 		ajax: {
 			url: "/promocao/datatables/server",
 			data: "data"
@@ -27,34 +28,70 @@ $(document).ready(function(){
 			{data:'categoria.titulo'}
 		],
 		dom: 'Bfrtip',
- 
 		buttons: [
 			{
 				text:"Editar",
 				attr:{
 					id:"btn-editar",
-					type:"button"
-					}
+					type:"button"				
 				},
-				{
+				enabled: false
+			},
+			{
 				text:"Excluir",
 				attr:{
 					id:"btn-excluir",
 					type:"button"
-				}
-
+				},
+				enabled: false
 			}
 		]		
 	});
+
+	//acao oara marcar/desmarcar buttons ao clicar na ordenacao
+	$("#table-server thead").on('click', 'tr', function(){
+		table.buttons().disable();
+	});
 	
-	
-	$("#btn-editar").on("click",function(){
-		alert("click com o button editar")
+		//acao oara marcar/desmarcar buttons ao selecionar registros
+	$("#table-server tbody").on('click', 'tr', function(){
+		if($(this).hasClass('selected')){
+			$(this).removeClass('selected'); 
+			table.buttons().disable();
+			
+		}else{
+		   $('tr.selected').removeClass('selected'); 
+		   $(this).addClass('selected');
+		   table.buttons().enable();
+		}	
 	});
 
-	$("#btn-excluir").on("click",function(){
-		alert("click com o button excluir")
+    // acao do botao de editar (abrir modal)
+	$("#btn-editar").on("click",function(){	
+		if(  isSelectedRow()){
+			  $("#modal-form").modal('show');
+		 }
 	});
+
+
+	// acao do botao de excluir (abrir modal)
+	$("#btn-excluir").on('click', function() {
+		if ( isSelectedRow() ) {
+			$("#modal-delete").modal('show');
+		}
+	});
+	
+
+	function getPromoId(){
+		return 	table.row(table.$('tr.selected')).data().id;
+	}
+	
+	function isSelectedRow() {
+		var trow = table.row(table.$('tr.selected'));
+		return trow.data() !== undefined;
+	}
+
+
 });
 
 

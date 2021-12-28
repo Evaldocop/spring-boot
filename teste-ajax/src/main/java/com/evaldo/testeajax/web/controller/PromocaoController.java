@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -81,7 +80,7 @@ public class PromocaoController {
 	public String listarOfertas(ModelMap model){
 	  //ordenamento não funciona
     	Sort.Direction sort= Sort.Direction.ASC;
-		
+    //	 Sort sort= Sort.by(Direction.ASC,"dtCadastro");
 	   PageRequest pagesRequest = PageRequest.of(0,5 , sort);
 		model.addAttribute("promocoes",promocaoRepository.findAll(pagesRequest));
 		return "promo-list";
