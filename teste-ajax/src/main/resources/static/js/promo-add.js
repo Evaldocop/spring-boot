@@ -46,7 +46,6 @@ $("#form-add-promo").submit(function(evt) {
 		},
 		statusCode: {
 			422: function(xhr) {
-				console.log("status>>>>", xhr.status);
 				var errors = $.parseJSON(xhr.responseText);
 				$.each(errors, function(key, val) {
 
