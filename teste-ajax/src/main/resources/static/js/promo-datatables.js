@@ -82,6 +82,23 @@ $(document).ready(function(){
 	});
 	
 
+	
+	//exclusao de uma promocao
+	$("#btn-del-modal").on("click", function(){	
+	    var id =getPromoId();
+		$.ajax({
+			method:"GET",
+			url:"/promocao/delete/"+id,
+			success: function(){
+				$("#modal-delete").modal('hide');
+				table.ajax.reload();
+			},
+			error:  function(){
+				alerts("ops.... ocorreu um erro");
+			}
+		});
+	});
+
 	function getPromoId(){
 		return 	table.row(table.$('tr.selected')).data().id;
 	}
@@ -90,7 +107,6 @@ $(document).ready(function(){
 		var trow = table.row(table.$('tr.selected'));
 		return trow.data() !== undefined;
 	}
-
 
 });
 

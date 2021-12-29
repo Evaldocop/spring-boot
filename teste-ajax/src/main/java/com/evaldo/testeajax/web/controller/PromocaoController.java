@@ -45,6 +45,16 @@ public class PromocaoController {
 	@Autowired
 	private PromocaoRepository promocaoRepository;
 	
+	
+	//================ EXCLUSAO PROMOCAO ==========================================
+	
+	@GetMapping("/delete/{id}")
+	public ResponseEntity<?> excluirPromocao(@PathVariable ("id") Long id){
+		System.out.print(">>>>>>"+ id);
+		promocaoRepository.deleteById(id);
+		return ResponseEntity.ok().build();
+    }
+	
 	//================ DATATABLES =================================================
 	
 	@GetMapping("/tabela")
