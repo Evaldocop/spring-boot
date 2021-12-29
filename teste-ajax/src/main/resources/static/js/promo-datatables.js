@@ -69,7 +69,31 @@ $(document).ready(function(){
     // acao do botao de editar (abrir modal)
 	$("#btn-editar").on("click",function(){	
 		if(  isSelectedRow()){
-			  $("#modal-form").modal('show');
+			  var id = getPromoId();
+			  $.ajax({
+				method:"GET",
+				url: "/promocao/edit/" +id,
+				beforeSend: function(){
+					 $("#modal-form").modal('show');
+				},
+				success: function( data ){
+					$("#edt_id").val(data.id);
+					//nao e campo de input, usa tet
+					$("#edt_site").text(data.site);
+					$("#edt_titulo").val(data.titulo);
+					$("#edt_descricao").val(data.descricao);
+					$("#edt_preco").val(data.preco);
+				    $("#edt_categoria").val(data.categoria.id);
+					$("#edt_linkImagem").val(data.linkImagem);
+					$("#edt_imagem").attr('src',data.linkImagem);
+				},
+				error : function(){
+					alert("Ops! algum erro ocorreu.");
+
+				}
+			  
+			  });
+			  
 		 }
 	});
 

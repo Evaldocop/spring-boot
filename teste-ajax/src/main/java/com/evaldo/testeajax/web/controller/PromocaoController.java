@@ -46,11 +46,19 @@ public class PromocaoController {
 	private PromocaoRepository promocaoRepository;
 	
 	
+	
+	//================ EDITAR PROMOCAO ==========================================
+	
+		@GetMapping("/edit/{id}")
+		public ResponseEntity<?> preEditarPromocao(@PathVariable ("id") Long id){
+			Promocao promo = promocaoRepository.findById(id).get();
+			return ResponseEntity.ok(promo);
+	    }
+		
 	//================ EXCLUSAO PROMOCAO ==========================================
 	
 	@GetMapping("/delete/{id}")
 	public ResponseEntity<?> excluirPromocao(@PathVariable ("id") Long id){
-		System.out.print(">>>>>>"+ id);
 		promocaoRepository.deleteById(id);
 		return ResponseEntity.ok().build();
     }
