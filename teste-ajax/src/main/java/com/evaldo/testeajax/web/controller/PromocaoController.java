@@ -1,7 +1,6 @@
 package com.evaldo.testeajax.web.controller;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +32,8 @@ import com.evaldo.testeajax.repository.CategoriaRepository;
 import com.evaldo.testeajax.repository.PromocaoRepository;
 import com.evaldo.testeajax.service.PromocaoDataTablesService;
 
+import dto.PromocaoDTO;
+
 @Controller
 @RequestMapping("/promocao")
 public class PromocaoController {
@@ -45,9 +46,33 @@ public class PromocaoController {
 	@Autowired
 	private PromocaoRepository promocaoRepository;
 	
+	//================EDITAR PROMOCAO ==========================================
+	
+	        @PostMapping("/edit")
+			public ResponseEntity<?> editarPromocao(@Valid PromocaoDTO dto, BindingResult result){
+				
+				if(result.hasErrors()) {
+					Map<String,String> errors=new HashMap<>();
+					for(FieldError error :result.getFieldErrors()) {
+						errors.put(error.getField(), error.getDefaultMessage());
+					}
+					
+					return ResponseEntity.unprocessableEntity().body(errors);
+					
+				}
+				Promocao promo = promocaoRepository.findById(dto.getId()).get();
+				promo.setCategoria(dto.getCategoria());
+				promo.setDescricao(dto.getDescricao());
+				promo.setLinkImagem(dto.getLinkImagem());
+				promo.setPreco(dto.getPreco());
+				promo.setTitulo(dto.getTitulo());
+				promocaoRepository.save(promo);
+				return ResponseEntity.ok().build();
+		    }
+		
 	
 	
-	//================ EDITAR PROMOCAO ==========================================
+	//================ PRE EDITAR PROMOCAO ==========================================
 	
 		@GetMapping("/edit/{id}")
 		public ResponseEntity<?> preEditarPromocao(@PathVariable ("id") Long id){
