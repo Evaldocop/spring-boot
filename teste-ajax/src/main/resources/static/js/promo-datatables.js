@@ -73,6 +73,11 @@ $(document).ready(function() {
 				method: "GET",
 				url: "/promocao/edit/" + id,
 				beforeSend: function() {
+					///removendo mensages
+					$("span").closest(".error-span").remove();
+
+					// removendo bordas vermelhas
+					$(".is-invalid").removeClass("is-invalid");
 					$("#modal-form").modal('show');
 				},
 				success: function(data) {
@@ -109,6 +114,15 @@ $(document).ready(function() {
 			method: "POST",
 			url: "/promocao/edit",
 			data: promo,
+			beforeSend: function() {
+
+
+				///removendo mensages
+				$("span").closest(".error-span").remove();
+
+				// removendo bordas vermelhas
+				$(".is-invalid").removeClass("is-invalid");
+			},
 			success: function() {
 				$("#modal-form").modal("hide");
 				table.ajax.reload();
@@ -118,7 +132,7 @@ $(document).ready(function() {
 				422: function(xhr) {
 					console.log('status error:', xhr.status);
 					var errors = $.parseJSON(xhr.responseText);
-					$.each(errors, function(key, val){
+					$.each(errors, function(key, val) {
 						$("#edt_" + key).addClass("is-invalid");
 						$("#error-" + key)
 							.addClass("invalid-feedback")
@@ -132,7 +146,7 @@ $(document).ready(function() {
 	//alterar a imagem no componente <img> do modal
 	$("#edt_linkImagem").on("change", function() {
 		var link = $(this).val();
-		$("#edit_imagem").attr("src", link);
+		$("#edt_imagem").attr("src", link);
 	});
 
 

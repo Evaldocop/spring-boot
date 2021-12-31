@@ -124,6 +124,7 @@ public class PromocaoController {
 	@GetMapping("/list")
 	public String listarOferta(ModelMap model) {
 		Sort sort= Sort.by(Direction.ASC,"dtCadastro");
+		/// PageRequest.of(0, 8, sort) (index start page, number of lines, start order )
 		PageRequest pageRequest = PageRequest.of(0, 8, sort);
 		model.addAttribute("promocoes", promocaoRepository.findAll(pageRequest));
 		return "promo-list";

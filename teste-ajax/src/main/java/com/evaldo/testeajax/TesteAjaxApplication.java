@@ -1,12 +1,14 @@
 package com.evaldo.testeajax;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.directwebremoting.spring.DwrSpringServlet;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ImportResource;
 
-import com.evaldo.testeajax.service.SocialMetaTagService;
-
+@ImportResource(locations = "classpath:dwr-spring.xml")
 @SpringBootApplication
 public class TesteAjaxApplication  implements CommandLineRunner  {
 
@@ -16,18 +18,23 @@ public class TesteAjaxApplication  implements CommandLineRunner  {
 	}
 
 	
-	  @Autowired private SocialMetaTagService service;
+	 // @Autowired private SocialMetaTagService service;
 	 
 	
 	  @Override public void run(String... args) throws Exception {
-	  
-			/*
-			 * SocialMetaTag tag = service.getSocialMetaTagbyUrl(
-			 * "https://www.udemy.com/course/spring-boot-mvc-com-thymeleaf/");
-			 * System.out.println(tag.toString());
-			 */
+
 	  
 	  }
-	 
+	  @Bean
+	  public ServletRegistrationBean<DwrSpringServlet> dwrSpringServlet(){
+		  DwrSpringServlet dwrSpringServlet = new DwrSpringServlet();
+		  ServletRegistrationBean< DwrSpringServlet> registrationBean=
+				  new ServletRegistrationBean<>(dwrSpringServlet,"/dwr/*");
+		  registrationBean.addInitParameter("debug", "true");
+		  registrationBean.addInitParameter("activeReverseAjaxEnabled",  "true");
+		  return registrationBean;
+		  
+	  }
+	
 
 }

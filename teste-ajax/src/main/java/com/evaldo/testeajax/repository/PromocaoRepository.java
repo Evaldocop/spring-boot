@@ -1,8 +1,9 @@
 package com.evaldo.testeajax.repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
-
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,12 @@ import com.evaldo.testeajax.domain.Promocao;
 
 public interface PromocaoRepository extends JpaRepository<Promocao, Long>{
 	
+	@Query(" select count(p.id) as count, max(p.dtCadastro) as lastDate from Promocao p "
+			+ " where p.dtCadastro > :data")
+	Map<String , Object> totalAndUltimaDataDePromocao(@Param("data") LocalDateTime data);
 	
+	@Query("select p.dtCadastro from Promocao p")
+	Page<LocalDateTime> findUltimaDataDePromocao(Pageable pageable);
 	
 	@Query("select distinct p.site from Promocao p where p.site LIKE %:termo%")
 	List<String> findSiteTermo(@Param("termo") String site);

@@ -1,25 +1,25 @@
 var pageNumber = 0;
 
-$(document).ready(function(){
+$(document).ready(function() {
 	$("#loader-img").hide();
 	$("#fim-btn").hide();
 });
 
 // efeito infinte scroll
 $(window).scroll(function() {
-	
+
 	var scrollTop = $(this).scrollTop();
 	var conteudo = $(document).height() - $(window).height();
-	
+
 	//console.log('scrollTop: ', scrollTop, ' | ', 'conteudo', conteudo);
-	
+
 	if (scrollTop >= conteudo) {
 		pageNumber++;
-		setTimeout(function(){
+		setTimeout(function() {
 			loadByScrollBar(pageNumber);
 		}, 200);
 	}
-	
+
 });
 
 function loadByScrollBar(pageNumber) {
@@ -34,15 +34,15 @@ function loadByScrollBar(pageNumber) {
 		beforeSend: function() {
 			$("#loader-img").show();
 		},
-		success: function( response ) {
+		success: function(response) {
 			//console.log("resposta > ", response);
 			//console.log("lista > ", response.length);			
 			if (response.length > 150) {
-			
+
 				$(".row").fadeIn(250, function() {
 					$(this).append(response);
 				});
-			
+
 			} else {
 				$("#fim-btn").show();
 				$("#loader-img").removeClass("loader");
@@ -54,7 +54,7 @@ function loadByScrollBar(pageNumber) {
 		complete: function() {
 			$("#loader-img").hide();
 		}
-	})  
+	})
 }
 
 // autocomplete
@@ -79,17 +79,46 @@ $("#autocomplete-submit").on("click", function() {
 		method: "GET",
 		url: "/promocao/site/list",
 		data: {
-			site : site
+			site: site
 		},
 		beforeSend: function() {
 			pageNumber = 0;
 			$("#fim-btn").hide();
-			$(".row").fadeOut(400, function(){
+			$(".row").fadeOut(400, function() {
 				$(this).empty();
 			});
 		},
 		success: function(response) {
-			$(".row").fadeIn(250, function(){
+			$(".row").fadeIn(250, function() {
+				$(this).append(response);
+			});
+		},
+		error: function(xhr) {
+			alert("Ops, algo deu errado: " + xhr.status + ", " + xhr.statusText);
+		}
+	});
+});
+$("#btn-alert").on("click", function() {
+
+	$.ajax({
+		method: "GET",
+		url: "/promocao/list/ajax",
+		data: {
+			page:0
+		},
+		beforeSend: function() {
+			pageNumber = 0;
+			totalOfertas=0;
+			$("#fim-btn").hide();
+			$("#loader-img").addClass("loader");
+			$("#btn-alert").attr("style","display: none;");
+			$(".row").fadeOut(400, function() {
+				$(this).empty();
+			});
+		},
+		success: function(response) {
+			$("#loader-img").removeClass("loader");
+			$(".row").fadeIn(250, function() {
 				$(this).append(response);
 			});
 		},
@@ -103,7 +132,7 @@ $("#autocomplete-submit").on("click", function() {
 $(document).on("click", "button[id*='likes-btn-']", function() {
 	var id = $(this).attr("id").split("-")[2];
 	console.log("id: ", id);
-	
+
 	$.ajax({
 		method: "POST",
 		url: "/promocao/like/" + id,
@@ -117,11 +146,31 @@ $(document).on("click", "button[id*='likes-btn-']", function() {
 });
 
 
+// ajax reverse
+var totalOfertas = 0;
 
+$(document).ready(function(){
+	init();
+});
 
+function init() {
+	console.log("dwr init...");
+	dwr.engine.setActiveReverseAjax(true);
+	dwr.engine.setErrorHandler(error);
+	DWRAlertaPromocoes.init();
+}
 
+function error(excpetion) {
+	console.log("dwr error...", excpetion);
+}
 
-
-
+function showButton(count){
+	totalOfertas  = totalOfertas+ count;
+	$("#btn-alert").show(function(){
+		$(this)
+		.attr("style","display:block;")
+		.text("Veja " + totalOfertas + " nova(s) oferta(s)!");	
+	});
+}
 
 
