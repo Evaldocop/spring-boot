@@ -63,7 +63,12 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
-
+		<!-- -DWR -->
+		<dependency>
+			<groupId>org.directwebremoting</groupId>
+			<artifactId>dwr</artifactId>
+			<version>3.0.2-RELEASE</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -119,16 +119,15 @@ public class PromocaoController {
 	}
 	
 	
+	
+	
 	@GetMapping("/list")
-	public String listarOfertas(ModelMap model){
-	  //ordenamento não funciona
-    	Sort.Direction sort= Sort.Direction.ASC;
-    //	 Sort sort= Sort.by(Direction.ASC,"dtCadastro");
-	   PageRequest pagesRequest = PageRequest.of(0,5 , sort);
-		model.addAttribute("promocoes",promocaoRepository.findAll(pagesRequest));
+	public String listarOferta(ModelMap model) {
+		Sort sort= Sort.by(Direction.ASC,"dtCadastro");
+		PageRequest pageRequest = PageRequest.of(0, 8, sort);
+		model.addAttribute("promocoes", promocaoRepository.findAll(pageRequest));
 		return "promo-list";
 	}
-	
 	
 	@GetMapping("/list/ajax")
 	public String listarCards(@RequestParam(name = "page" ,defaultValue = "1") int page,
